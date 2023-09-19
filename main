@@ -1,0 +1,79 @@
+Launch an EC2 instance using TerraforLLm
+
+    Install Terraform and configure AWS CLI with your AWS credentials
+    .
+    Create a new directory for your Terraform configuration files:
+
+    mkdir learn-terraform-aws-instance
+    cd learn-terraform-aws-instance
+
+Create a Terraform configuration file (e.g., main.tf) with the following content:
+
+provider "aws" {
+  region = "us-est-1"
+}
+
+resource "aws_instance" "example" {
+  ami           = "ami-0c94855ba95c71c99" # Amazon Linux 2 AMI
+  instance_type = "t2.micro"
+
+  key_name = "your_keypair_name"
+
+  tags = {
+    Name = "terraform-example-instance"
+  }
+}
+
+Replace your_keypair_name with the name of your key pair.
+Initialize the Terraform workspace:
+
+terraform init
+
+Apply the Terraform configuration:
+
+terraform apply
+
+    Confirm the changes by typing yes when prompted.
+
+Connect to the instance
+
+    Obtain the public IP address of the instance from the Terraform output or the AWS Console.
+    Connect to the instance using SSH:
+
+    ssh -i /path/to/your_keypair.pem ec2-user@instance_public_ip
+
+    Replace /path/to/your_keypair.pem with the path to your key pair file and instance_public_ip with the public IP address of the instance.
+
+Install Jenkins, Java, and Python in the instance
+
+    Update the package list:
+
+    sudo yum update
+
+Install Java:
+
+sudo yum install java-1.8.0-openjdk
+
+Install Python:
+
+sudo yum install python3
+
+Install Jenkins:
+
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key
+sudo yum install jenkins
+
+Start Jenkins:
+
+sudo systemctl start jenkins
+sudo systemctl enable jenkins
+
+Access Jenkins in your browser by navigating to http://instance_public_ip:8080.
+Retrieve the Jenkins unlock key:
+
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
+    Enter the unlock key in the Jenkins setup wizard and follow the prompts to complete the installation.
+
+You have now successfully launched an EC2 instance using Terraform and installed Jenkins, Java, and Python on i
